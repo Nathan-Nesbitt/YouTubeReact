@@ -1,10 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+
+test('Basic Components Test', () => {
   render(<App />);
-  const linkElement = screen.getByText(/Youtuber Name/p);
-  expect(linkElement).toBeInTheDocument();
-  const linkElement = screen.getByText(/End Time/label);
-  expect(linkElement).toBeInTheDocument();
+  const nameElement = screen.getByText("Youtuber Name");
+  expect(nameElement).toBeInTheDocument();
 });
