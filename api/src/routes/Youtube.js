@@ -25,7 +25,7 @@ var getChannelUploadLocation = function(channelName) {
             forUsername: channelName
         }).then(response => {
             var channels = response.data.items;
-            if (channels.length == 0)
+            if (!channels || channels.length == 0)
                 failure("No channels found")
             else
                 success(channels[0].contentDetails.relatedPlaylists.uploads)
@@ -33,15 +33,15 @@ var getChannelUploadLocation = function(channelName) {
     })
 }
 
-var getUploads = function(channelName) {
+var getUploads = function(playlistId) {
     return new Promise((success, failure) => {
         youtube.playlistItems.list({
             maxResults: 10,
             part: ['id', 'status', 'snippet'],
-            playlistId: channels[0].contentDetails.relatedPlaylists.uploads
+            playlistId: playlistId
         }).then(response => {
             var channel_videos = response.data.items;
-            if (channel_videos.length == 0)
+            if (!channel_videos || channel_videos.length == 0)
                 failure("No videos found")
             else
                 success(channel_videos)
@@ -49,69 +49,57 @@ var getUploads = function(channelName) {
     })
 }
 
-var getVideoViews = function(channelName) {
+var getVideoViews = function(videoID) {
     return new Promise((success, failure) => {
         youtube.videos.list({
             maxResults: 1,
             part: ['statistics', 'snippet'],
-            id: channel_videos[0].snippet.resourceId.videoId
+            id: videoID
         }).then(response => {
-            var channels = response.data.items;
-            if (channels.length == 0)
+            var videos = response.data.items;
+            if (!videos || videos.length == 0)
                 failure("Video info not found")
             else
-                success(channels[0].contentDetails.relatedPlaylists.uploads)
+                success(videos[0].statistics.viewCount)
         })
     })
 }
 
 router.get('/:channelName', function(req, res, next) {
     var channelName = req.params.channelName;
-    youtube.channels.list({
-        part: 'id,snippet,contentDetails,statistics',
-        forUsername: channelName
-    }).then(response => {
-        var channels = response.data.items;
-        if (!channels || channels.length == 0) {
+    var channelID, channelName, videoID, numberOfViews;
+    getChannelUploadLocation(channelName)
+    .then(result => {
+        console.log(result)
+        return getUploads(result)
+    })
+    .then(result => {
+        console.log(result[0].snippet.resourceId.videoId)
+        return getVideoViews(result[0].snippet.resourceId.videoId)
+    })
+    .then(result => {
+        res.send({
+            success: true,
+            data: {
+                numberOfViews: result
+            }
+        })
+    })
+    .catch(err => {
+        // Put this catch to make sure we don't dump errors with youtube details
+        if(typeof err === "string")
             res.status(400).send({
                 success: false,
                 data: {
-                    error: "No channel found."
+                    error: err
                 }
             })
-        } 
-        else {
-            youtube.playlistItems.list({
-                maxResults: 10,
-                part: ['id', 'status', 'snippet'],
-                playlistId: channels[0].contentDetails.relatedPlaylists.uploads
-            }).then(response => {
-                var channel_videos = response.data.items;
-                youtube.videos.list({
-                    maxResults: 10,
-                    part: ['statistics', 'snippet'],
-                    id: channel_videos[0].snippet.resourceId.videoId
-                }).then(response => {
-                    res.send({
-                        success: true,
-                        data: {
-                            channelID: channels[0].id,
-                            channelName: channels[0].snippet.title,
-                            videoID: channel_videos[0].snippet.resourceId.videoId,
-                            numberOfViews: response.data.items[0].statistics.viewCount
-                        }
-                    })
-                }).catch(error => {
-                    console.log(error)
-                })
-            }).catch(error => {
-                console.log(error)
-            })
-        }
     })
-    .catch(error => {
-        console.error(error);
-    });;
 });
 
-module.exports = router;
+module.exports = {
+    router,
+    getChannelUploadLocation, 
+    getUploads, 
+    getVideoViews
+};

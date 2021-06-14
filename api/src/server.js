@@ -9,7 +9,7 @@ const port = process.env.PORT || 3001;
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 
-var youtubeRouter = require('./routes/Youtube');
+var youtubeRouter = require('./routes/Youtube').router;
 
 app.use('/youtube/', youtubeRouter);
 
