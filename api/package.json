@@ -4,8 +4,9 @@
   "description": "API for trufan",
   "main": "index.js",
   "scripts": {
-    "start": "node src/server.js",
-    "test": "mocha --require babel-register tests/**/*.js --exit"
+    "start": "set PRODUCTION=true && node src/server.js",
+    "test": "mocha --require babel-register tests/**/*.js --exit",
+    "dev": "node src/server.js"
   },
   "author": "Nathan Nesbitt",
   "license": "ISC",

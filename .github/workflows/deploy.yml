@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy React app
+        uses: appleboy/ssh-action@v0.1.2
+        with:
+          host:  ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          script: |
+            cd ~/YouTubeReact/ # navigate into the folder
+            git pull
+            npm install # install dependencies
+            npm run build # build production
+            cd api
+            npm install
+            pm2 start npm
