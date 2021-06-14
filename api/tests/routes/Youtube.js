@@ -24,6 +24,7 @@ describe("Youtube Functions", function() {
         it("Successfully gets a real upload ID's videos", function(done) {
             getUploads("UUq-Fj5jknLsUf-MWSy4_brA")
             .then(res => {
+                console.log(res)
                 res.should.have.length(10)
                 done()
             })
