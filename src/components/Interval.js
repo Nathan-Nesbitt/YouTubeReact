@@ -27,7 +27,7 @@ export default function Interval(props) {
             props.setEndTime(new Date(date.getTime() + (1000 * 60 * 2)));
             setEndDate(date.getTime() + (1000 * 60 * 2))
         }
-    }, []);
+    }, [endDate, props]);
 
 
     return (<div style={{display: "flex", flexDirection: "row", justifyContent: "center", margin: "10px"}}>
