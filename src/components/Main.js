@@ -14,7 +14,6 @@ class Main extends React.Component {
             name: "tseries",
             nameError: false,
             start: null,
-            startError: false,
             end: null,
             endError: false,
             startViews: null,
@@ -26,7 +25,6 @@ class Main extends React.Component {
         }
 
         this.setName = this.setName.bind(this)
-        this.setStartTime = this.setStartTime.bind(this)
         this.setEndTime = this.setEndTime.bind(this)
         this.request = this.request.bind(this)
         this.validate = this.validate.bind(this)
@@ -36,11 +34,6 @@ class Main extends React.Component {
 
     setName(name) {
         this.setState({"name": name})
-        this.setState({"loaded": false})
-    }
-
-    setStartTime(startTime) {
-        this.setState({"start": startTime})
         this.setState({"loaded": false})
     }
 
@@ -62,7 +55,6 @@ class Main extends React.Component {
 
     clear() {
         this.setState({"nameError": false})
-        this.setState({"startError": false})
         this.setState({"endError": false})
         this.setState({"error": null})
     }
@@ -86,12 +78,8 @@ class Main extends React.Component {
         // Calculate the first sleep //
         if(this.validate()) {
             this.setState({"submit": true})
-            var time = (this.state.start.getTime() - new Date().getTime())
-            if(time < 0)
-                time = 0;
-            this.sleep(time).then(() => {
-                return fetch(`/youtube/${this.state.name}`)            
-            })
+            var time;
+            fetch(`/youtube/${this.state.name}`)
             .then(response => {
                 if (!response.ok)
                     throw new Error(response)
@@ -123,6 +111,7 @@ class Main extends React.Component {
                 this.setState({"error": "That channel name is not valid"})
                 this.setState({"nameError": true})
                 this.setState({"loaded": false})
+                this.setState({"submit": false})
             })
         }
     }
@@ -133,7 +122,7 @@ class Main extends React.Component {
         return(<div className="Main" style={{display: "flex", flexDirection: "column", marginLeft: "20%", marginRight: "20%", marginTop: "20vh"}}>
             {this.state.loaded & !this.state.error ?
                 <div style={{textAlign: "center"}}>
-                    <p>{this.state.delta} new people watched the newest {this.state.name} video between these times.</p>
+                    <p>{this.state.delta} new people watched the newest {this.state.name} video during this time.</p>
                 </div> : null
             }
 
@@ -151,9 +140,7 @@ class Main extends React.Component {
             }
             <Name setName={this.setName} error={this.state.nameError}/>
             <Interval 
-                setStartTime={this.setStartTime} 
                 setEndTime={this.setEndTime}
-                startTimeError={this.state.startError}
                 endTimeError={this.state.endError}
             />
             <div style={{display: "flex", justifyContent: "center", marginTop: "20px"}}>
