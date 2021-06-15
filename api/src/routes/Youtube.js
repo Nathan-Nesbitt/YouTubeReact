@@ -15,7 +15,7 @@ const {google} = require('googleapis');
 
 const youtube = google.youtube({
     version: 'v3',
-    auth: 'AIzaSyD3g_ekVZLfUT5iVHUW9rOLGHv6ZkEXzhs'
+    auth: process.env.YOUTUBE_API_KEY
 });
 
 var getChannelUploadLocation = function(channelName) {

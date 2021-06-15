@@ -26,4 +26,5 @@ jobs:
             npm run build # build production
             cd api
             npm install
+            YOUTUBE_API_KEY=${{ secrets.YOUTUBE_API_KEY }}
             pm2 start npm
