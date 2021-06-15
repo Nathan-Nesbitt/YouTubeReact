@@ -4,7 +4,7 @@
   "description": "API for trufan",
   "main": "index.js",
   "scripts": {
-    "start": "set PRODUCTION=true && node src/server.js",
+    "start": "PRODUCTION=true && node src/server.js",
     "test": "mocha --require babel-register tests/**/*.js --exit",
     "dev": "node src/server.js"
   },
