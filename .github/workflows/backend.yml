@@ -21,9 +21,10 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
+      env:
         YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
     - run: |
-      export YOUTUBE_API_KEY=$YOUTUBE_API_KEY
+      cd api
       npm ci
       npm run build --if-present
       npm test
