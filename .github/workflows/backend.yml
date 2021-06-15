@@ -21,7 +21,7 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm ci
+    - run: echo $SUPER_SECRET && npm ci
       env:
         SUPER_SECRET: ${{ secrets.SuperSecret }}
       working-directory: api
