@@ -4,7 +4,8 @@ This is a React + Express web application that leverages the Youtube API to requ
 ## Development
 
 You need a YouTube api key to run this locally, you can provide it to the
-backend by running `YOUTUBE_API_KEY=<Your Key Here>` on Linux.
+backend by running `YOUTUBE_API_KEY=<Your Key Here>` on Linux or 
+`$Env:YOUTUBE_API_KEY = "<Your Key Here>"` on windows.
 We can run the dev front end by running `npm start` in the root directory. 
 We can run the backend using `npm run dev` in the `api` directory. 
 
