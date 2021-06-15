@@ -27,4 +27,5 @@ jobs:
             cd api
             npm install
             YOUTUBE_API_KEY=${{ secrets.YOUTUBE_API_KEY }}
-            pm2 start npm
+            pm2 delete youtube
+            pm2 start npm --name youtube -- start
