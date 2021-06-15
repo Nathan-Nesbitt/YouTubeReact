@@ -122,7 +122,7 @@ class Main extends React.Component {
         return(<div className="Main" style={{display: "flex", flexDirection: "column", marginLeft: "20%", marginRight: "20%", marginTop: "20vh"}}>
             {this.state.loaded & !this.state.error ?
                 <div style={{textAlign: "center"}}>
-                    <p>{this.state.delta} new people watched the newest {this.state.name} video during this time.</p>
+                    <p>There were {this.state.delta} new people watched the newest {this.state.name} video during this time.</p>
                 </div> : null
             }
 
